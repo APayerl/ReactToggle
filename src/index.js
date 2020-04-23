@@ -7,8 +7,10 @@ import './index.css';
 class Toggle extends Component {
 	constructor(props) {
 		super(props);
+		console.log("constructor");
 		this.state = {
-			toggledOn: false,
+			listeners: props.listeners,
+			toggledOn: props.default,
 			base: {
 				height: -1,
 				width: -1,
@@ -23,6 +25,7 @@ class Toggle extends Component {
 	}
 
 	componentDidMount() {
+		console.log("mounted");
 		const bHeight = this.baseElement.clientHeight;
 		const bWidth = this.baseElement.clientHeight;
 		const bBorderRadius = this.baseElement.style.borderRadius;
@@ -45,17 +48,8 @@ class Toggle extends Component {
 	}
 
 	handleClick(event) {
-		let toggled = this.state.toggledOn;
-		if(event.target.classList.contains('enabled')) {
-			event.target.classList.replace('enabled', 'disabled');
-			this.setState({ toggledOn: false });
-			toggled = !toggled;
-		} else {
-			event.target.classList.replace('disabled', 'enabled');
-			this.setState({ toggledOn: true });
-			toggled = !toggled;
-		}
-		console.log(toggled);
+		this.state.listeners.forEach(listener => listener(!this.state.toggledOn));
+		this.setState({ toggledOn: !this.state.toggledOn });
 	}
 
 	render() {
@@ -68,7 +62,7 @@ class Toggle extends Component {
 					padding: this.calculatePadding() }}
 				ref={ (divElement) => { this.baseElement = divElement } }>
 				<button 
-					className="slider disabled" 
+					className={"slider " + (this.state.toggledOn ? "enabled" : "disabled") } 
 					onClick={this.handleClick.bind(this)}
 					ref={ (divElement) => { this.sliderElement = divElement } }></button>
 			</div>
@@ -78,7 +72,19 @@ class Toggle extends Component {
 
 // ========================================
 
+function callMeMaybe(result) {
+	console.log("callMeMaybe", result);
+}
+
+function callMePerhaps(result) {
+	console.log("callMePerhaps", result);
+}
+
+function callMePlease(result) {
+	console.log("callMePlease", result);
+}
+
 ReactDOM.render(
-	<Toggle />,
+	<Toggle default={false} listeners={[ callMeMaybe, callMePerhaps, callMePlease ]} />,
 	document.getElementById('root')
 );
