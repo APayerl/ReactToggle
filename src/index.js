@@ -7,16 +7,23 @@ import './index.css';
 class Toggle extends Component {
 	constructor(props) {
 		super(props);
-		console.log("constructor");
 		this.state = {
 			listeners: props.listeners,
 			toggledOn: props.default,
 			base: {
+				color: {
+					enabled: props.baseColorEnabled ? props.baseColorEnabled : "green",
+					disabled: props.baseColorDisabled ? props.baseColorDisabled : "gray"
+				},
 				height: -1,
 				width: -1,
 				borderRadius: -1
 			},
 			slider: {
+				color: {
+					enabled: props.sliderColorEnabled ? props.sliderColorEnabled : "white",
+					disabled: props.sliderColorDisabled ? props.sliderColorDisabled : "white"
+				},
 				height: -1,
 				width: -1,
 				borderRadius: -1
@@ -25,17 +32,16 @@ class Toggle extends Component {
 	}
 
 	componentDidMount() {
-		console.log("mounted");
-		const bHeight = this.baseElement.clientHeight;
-		const bWidth = this.baseElement.clientHeight;
-		const bBorderRadius = this.baseElement.style.borderRadius;
-		const sHeight = this.sliderElement.clientHeight;
-		const sWidth = this.sliderElement.clientHeight;
-		const sBorderRadius = this.sliderElement.style.borderRadius;
+		const base = this.state.base;
+		base.height = this.baseElement.clientHeight;
+		base.width = this.baseElement.clientHeight;
+		base.borderRadius = this.baseElement.style.borderRadius;
+		const slider = this.state.slider;
+		slider.height = this.sliderElement.clientHeight;
+		slider.width = this.sliderElement.clientHeight;
+		slider.borderRadius = this.sliderElement.style.borderRadius;
 
-		console.log(bHeight, bWidth, bBorderRadius);
-		console.log(sHeight, sWidth, sBorderRadius);
-		this.setState({ base: { height: bHeight, bWidth: bWidth, borderRadius: bBorderRadius }, slider: { height: sHeight, width: sWidth, borderRadius: sBorderRadius }});
+		this.setState({ base: base, slider: slider});
 	}
 
 	calculatePadding() {
@@ -48,7 +54,9 @@ class Toggle extends Component {
 	}
 
 	handleClick(event) {
-		this.state.listeners.forEach(listener => listener(!this.state.toggledOn));
+		if(this.state.listeners) {
+			this.state.listeners.forEach(listener => listener(!this.state.toggledOn));
+		}
 		this.setState({ toggledOn: !this.state.toggledOn });
 	}
 
@@ -58,11 +66,14 @@ class Toggle extends Component {
 				id="base" 
 				className="switch" 
 				style={{
-					backgroundColor: this.state.toggledOn ? 'green' : 'gray',
+					backgroundColor: this.state.toggledOn ? this.state.base.color.enabled : this.state.base.color.disabled,
 					padding: this.calculatePadding() }}
 				ref={ (divElement) => { this.baseElement = divElement } }>
 				<button 
-					className={"slider " + (this.state.toggledOn ? "enabled" : "disabled") } 
+					className={"slider " + (this.state.toggledOn ? "enabled" : "disabled") }
+					style={{
+						backgroundColor: this.state.toggledOn ? this.state.slider.color.enabled : this.state.slider.color.disabled
+					}}
 					onClick={this.handleClick.bind(this)}
 					ref={ (divElement) => { this.sliderElement = divElement } }></button>
 			</div>
@@ -85,6 +96,15 @@ function callMePlease(result) {
 }
 
 ReactDOM.render(
-	<Toggle default={false} listeners={[ callMeMaybe, callMePerhaps, callMePlease ]} />,
+	<Toggle 
+		default={false} 
+		listeners={[ 
+			callMeMaybe, 
+			callMePerhaps, 
+			callMePlease ]} 
+		baseColorDisabled={"red"} 
+		baseColorEnabled={"green"} 
+		sliderColorDisabled={"orange"} 
+		sliderColorEnabled={"yellow"} />,
 	document.getElementById('root')
 );

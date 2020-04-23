@@ -16,7 +16,6 @@ div#root {
 	height: 100%;
 	width: 50%;
 	z-index: 10;
-	background-color: white;
 	float: left;
 	border-radius: 50px;
 }
