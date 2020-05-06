@@ -66,13 +66,14 @@ class Toggle extends Component {
 				id="base" 
 				className="switch" 
 				style={{
-					backgroundColor: this.state.toggledOn ? this.state.base.color.enabled : this.state.base.color.disabled,
-					padding: this.calculatePadding() }}
+					backgroundColor: this.state.toggledOn ? this.state.base.color.enabled : this.state.base.color.disabled }}
 				ref={ (divElement) => { this.baseElement = divElement } }>
 				<button 
 					className={"slider " + (this.state.toggledOn ? "enabled" : "disabled") }
 					style={{
-						backgroundColor: this.state.toggledOn ? this.state.slider.color.enabled : this.state.slider.color.disabled
+						backgroundColor: this.state.toggledOn ? this.state.slider.color.enabled : this.state.slider.color.disabled,
+						borderWidth: this.calculatePadding(),
+						borderColor: this.state.toggledOn ? this.state.base.color.enabled : this.state.base.color.disabled
 					}}
 					onClick={this.handleClick.bind(this)}
 					ref={ (divElement) => { this.sliderElement = divElement } }></button>
@@ -102,9 +103,9 @@ ReactDOM.render(
 			callMeMaybe, 
 			callMePerhaps, 
 			callMePlease ]} 
-		baseColorDisabled={"red"} 
+		baseColorDisabled={"gray"} 
 		baseColorEnabled={"green"} 
-		sliderColorDisabled={"orange"} 
-		sliderColorEnabled={"yellow"} />,
+		sliderColorDisabled={"white"} 
+		sliderColorEnabled={"white"} />,
 	document.getElementById('root')
 );

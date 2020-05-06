@@ -1,22 +1,23 @@
 div#root {
 	width: 300px;
 	height: 100px;
+	border: solid black 5px;
 }
 
 .switch {
 	height: 100%;
 	width: 100%;
 	background-color: gray;
-	position: relative;
 	z-index: 20;
 	border-radius: 70px;
 }
 
 .slider {
+	box-sizing: border-box;
 	height: 100%;
 	width: 50%;
 	z-index: 10;
-	float: left;
+	border-style: solid;
 	border-radius: 50px;
 }
 
