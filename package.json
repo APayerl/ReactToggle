@@ -1,7 +1,16 @@
 {
   "name": "react-app",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,,
+  "author": "Anders Payerl",
+  "bugs": { 
+    "url": "https://github.com/APayerl/ReactyToggle/issues"
+  },
+  "description": "A customizable toggle component for react",
+  "homepage": "https://github.com/APayerl/ReactyToggle",
+  "keywords": ["toggle", "react", "customizable"],
+  "license": "MIT",
+  "repository": {"url": "https://github.com/APayerl/ReactyToggle"},
   "dependencies": {
     "react": "^16.13.1",
     "react-dom": "~16.13.1",
