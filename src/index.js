@@ -4,12 +4,40 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 
-class Toggle extends Component {
+export class ToggleService {
+	on;
+	listeners;
+
+	constructor(defaultState = false, listeners = []) {
+		this.on = defaultState;
+		this.listeners = listeners;
+	}
+
+	toggleCallback(state) {
+		this.on = state;
+		this.listeners.forEach(listener => listener(this.on));
+	}
+
+	addListener(listener) {
+		this.listeners.push(listener);
+	}
+
+	removeListener(listener) {
+		for(let i = 0; i < this.listeners.length; i++) {
+			if(this.listeners[i] === listener) {
+				this.listeners.splice(i, 1);
+				i--;
+			}
+		}
+	}
+}
+
+export default class Toggle extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			listeners: props.listeners,
-			toggledOn: props.default,
+			listeners: props.helper ? [props.helper.toggleCallback] : props.listeners,
+			toggledOn: props.helper ? props.helper.on : props.default,
 			base: {
 				color: {
 					enabled: props.baseColorEnabled ? props.baseColorEnabled : "green",
@@ -96,6 +124,8 @@ function callMePlease(result) {
 	console.log("callMePlease", result);
 }
 
+let myToggleHelper = new ToggleService(false, [callMeMaybe, callMePerhaps, callMePlease]);
+
 ReactDOM.render(
 	<Toggle 
 		default={false} 
@@ -106,6 +136,7 @@ ReactDOM.render(
 		baseColorDisabled={"gray"} 
 		baseColorEnabled={"green"} 
 		sliderColorDisabled={"white"} 
-		sliderColorEnabled={"white"} />,
+		sliderColorEnabled={"white"}
+		helper={myToggleHelper} />,
 	document.getElementById('root')
 );
